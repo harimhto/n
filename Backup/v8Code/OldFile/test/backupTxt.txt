@@ -1,0 +1,68 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const connection = require('./config/db'); // Change this line
+const authRoutes = require('./routes/authRoutes');
+const taskRoutes = require('./routes/taskRoutes');
+const userRoutes = require('./routes/userRouter');
+const SpaceRoutes = require('./routes/SpaceRouter');
+const commonRoutes = require('./routes/commonRoutes');
+const StatusRoutes = require('./routes/StatusRoutes');
+const RollAcceessRoutes = require('./routes/RollAcceessRoutes');
+
+
+const {
+    getAllTasksdemo,getAllTasksUser
+} = require('./controllers/taskController');
+
+dotenv.config();
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// No need to call a function, connection is already established
+// Just import it to establish the connection
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/tasks', taskRoutes);
+app.use('/api/user', userRoutes);
+
+app.use('/api/userdemo', getAllTasksdemo);
+app.use('/api/user1', userRoutes);
+
+app.use('/api/list-space-project', SpaceRoutes);
+
+app.use('/api/space', SpaceRoutes);
+
+
+// task model start
+app.use('/api/task', taskRoutes);
+// task model end
+
+
+// common Routes Start
+app.use('/api/status-list', commonRoutes);
+app.use('/api/assignee', commonRoutes);
+
+// status section
+app.use('/api/status', StatusRoutes);
+// common Routes End
+
+
+
+// status section
+app.use('/api/roll', RollAcceessRoutes);
+// common Routes End
+
+
+
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+    
+});
